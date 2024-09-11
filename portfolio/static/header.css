@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Gravitas+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+header {
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    background-color: #fff;
+    height: 70px;
+    width: 100%;
+    border-bottom: 1px solid #ffc800;
+    text-align: center;
+}
+
+.header_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+header a {
+    display: inline-block;
+}
+
+header a img {
+    width: 80px;
+    height: auto;
+    object-fit: contain;
+}
+
+.nav_items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.nav_items a {
+    margin: 20px 20px;
+    text-decoration: none;
+    transition: color 0.2s, transform 0.2s;
+    color: #000;
+}
+
+.active {
+    color: #ffc800 !important;
+}
+
+a {
+    color: #000;
+}
+
+a:visited {
+    color: #000;
+}
+
+a:hover {
+    color: #ffc800;
+    transform: scale(1.18);
+}
+
+a:active {
+    color: #ffc800;
+}
+
+/* new section for menu button */
+.menu-btn {
+    display: none;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 2;
+}
+
+.menu-btn span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #ffc800;
+    margin-bottom: 5px;
+    transition: transform 0.3s;
+}
+
+@media (max-width: 860px) {
+    .header_container {
+        padding: 10px 20px;
+    }
+
+    .menu-btn {
+        display: block;
+        padding-right: 20px;
+        /* margin-top: 24px; /* show menu button on smaller screens */
+    }
+
+    .nav_items {
+        display: none; /* hide nav menu by default on smaller screens */
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        padding: 10px 0;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav_items a {
+        flex: 1;
+        margin: 10px 5px;
+    }
+
+    .nav_items.active {
+        display: flex; /* show nav menu when active */
+    }
+
+    .menu-btn.open span:nth-child(1) {
+        transform: rotate(-45deg) translate(-4px, 5px);
+    }
+
+    .menu-btn.open span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-btn.open span:nth-child(3) {
+        transform: rotate(45deg) translate(-4px, -5px);
+    }
+}

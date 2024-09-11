@@ -4,8 +4,8 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("portfolio/", views.portfolio, name="portfolio"),
-    path('portfolio/portraits/', views.portfolio_portrait, name="portfolio_portraits"),
+    path("portfolio/<int:category_id>/", views.portfolio, name="portfolio"),
+    path('portfolio/portraits/<int:category_id>/', views.portfolio_portrait, name="portfolio_portraits"),
     path('portfolio/products/', views.portfolio_products, name="portfolio_products"),
     path('portfolio/weddings/', views.portfolio_weddings, name="portfolio_weddings"),
     path('portfolio/food/', views.portfolio_food, name="portfolio_food"),
