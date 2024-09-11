@@ -9,12 +9,32 @@ def index(request):
     return render(request, "index.html", {"images": images})
 
 
-def portfolio(request, category_id):
+def portfolio(request):
     """ Portoflio route for displaying images
     """
+    categories = Category.objects.all()
     images = Image.objects.all()
-    portrait_images = Image.objects.filter(category__id=category_id)
-    return render(request, "portfolio/portfolio.html", {"images": images, "portrait_images": portrait_images})
+
+    return render(request, "portfolio/portfolio.html", {
+        "images": images,
+        "categories": categories
+    })
+
+
+def portfolio_by_category(request, category_id=None):
+    """ Portoflio route for displaying images
+    """
+    categories = Category.objects.all()
+    images = Image.objects.all()
+
+    # optionally filter images by category if a category_id is given
+    if category_id:
+        images = Image.objects.filter(categories__id=category_id)
+
+    return render(request, "portfolio/portfolio.html", {
+        "images": images,
+        "categories": categories
+    })
 
 
 def portfolio_portrait(request, category_id):
@@ -22,7 +42,7 @@ def portfolio_portrait(request, category_id):
 
     Queries images related to a specific category using the category_id
     """
-    portrait_images = Image.objects.filter(category__id=category_id)
+    portrait_images = Image.objects.filter(categories__id=category_id)
     return render(request, "portfolio/portrait.html", {"images": portrait_images})
 
 

@@ -34,21 +34,21 @@
         </header>
         <h1>Commercial & Personal Works</h1>
         <nav class="nav_items_p" id="portfolio_nav">
-            {% for category in portrait_images %}
             <a href="{% url 'portfolio' %}" class="active">All</a>
-            <a href="{% url 'portfolio_portraits' category.id %}">Portrait & Corporate</a>
-            <a href="{% url 'portfolio_products' %}">Products</a>
-            <a href="{% url 'portfolio_weddings' %}">Weddings</a>
-            <a href="{% url 'portfolio_food' %}">Food</a>
+            {% for category in categories %}
+                <a href="{% url 'portfolio_by_category' category.id %}">{{ category.name }}</a>
+            {% endfor %}
         </nav>
-        <h3>All Projects</h3>
+        {% for category in categories %}
+            <h3>{{ category.description }}</h3>
+        {% endfor %}
         <div>
             {% for image in images %}
-            <div>
-                <img src="{{ image.url }}" alt="{{ image.title }}">
-            </div>
+                <div>
+                    <img src="{{ image.url }}" alt="{{ image.title }}">
+                </div>
             {% empty %}
-            <p>No images available</p>
+                <p>No images available</p>
             {% endfor %}
         </div>
         <footer>
