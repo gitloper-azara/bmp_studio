@@ -30,10 +30,12 @@ def portfolio_by_category(request, category_id=None):
     # optionally filter images by category if a category_id is given
     if category_id:
         images = Image.objects.filter(categories__id=category_id)
+        selected_category = Category.objects.get(id=category_id)
 
     return render(request, "portfolio/portfolio.html", {
         "images": images,
-        "categories": categories
+        "categories": categories,
+        "selected_category": selected_category
     })
 
 

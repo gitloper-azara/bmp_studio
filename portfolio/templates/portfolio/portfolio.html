@@ -39,9 +39,14 @@
                 <a href="{% url 'portfolio_by_category' category.id %}">{{ category.name }}</a>
             {% endfor %}
         </nav>
-        {% for category in categories %}
-            <h3>{{ category.description }}</h3>
-        {% endfor %}
+
+        {% if selected_category %}
+            <h3>{{ selected_category.description }}</h3>
+        {% else %}
+            <h3>All projects</h3>
+            <p>Browse all categories</p>
+        {% endif %}
+
         <div>
             {% for image in images %}
                 <div>
