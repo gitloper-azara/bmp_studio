@@ -50,10 +50,10 @@
             <p>Browse all categories</p>
         {% endif %}
 
-        <div>
+        <div class="image-grid">
             {% for image in images %}
-                <div>
-                    <img src="{{ image.url }}" alt="{{ image.title }}">
+                <div class="img-container">
+                    <img class="studio-img" src="{{ image.url }}" alt="{{ image.title }}">
                 </div>
             {% empty %}
                 <p>No images available</p>
