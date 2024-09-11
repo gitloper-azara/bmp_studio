@@ -1,6 +1,7 @@
 """ Models module for MySQL
 """
 from django.db import models
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -25,6 +26,7 @@ class Image(models.Model):
         "Photographer", related_name="images", on_delete=models.CASCADE
     )
     categories = models.ManyToManyField(Category, related_name="images")
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self) -> str:
         """ Returns the string representation of the image title

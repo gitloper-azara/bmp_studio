@@ -13,7 +13,7 @@ def portfolio(request):
     """ Portoflio route for displaying images
     """
     categories = Category.objects.all()
-    images = Image.objects.all()
+    images = Image.objects.order_by("-created_at")
 
     return render(request, "portfolio/portfolio.html", {
         "images": images,
@@ -46,18 +46,6 @@ def portfolio_portrait(request, category_id):
     """
     portrait_images = Image.objects.filter(categories__id=category_id)
     return render(request, "portfolio/portrait.html", {"images": portrait_images})
-
-
-def portfolio_products(request):
-    return render(request, "portfolio/product.html")
-
-
-def portfolio_weddings(request):
-    return render(request, "portfolio/weddings.html")
-
-
-def portfolio_food(request):
-    return render(request, "portfolio/food.html")
 
 
 def about(request):
