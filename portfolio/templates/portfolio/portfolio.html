@@ -34,9 +34,12 @@
         </header>
         <h1>Commercial & Personal Works</h1>
         <nav class="nav_items_p" id="portfolio_nav">
-            <a href="{% url 'portfolio' %}" class="active">All</a>
+            <a href="{% url 'portfolio' %}" class="{% if not selected_category %}active{% endif %}">All</a>
             {% for category in categories %}
-                <a href="{% url 'portfolio_by_category' category.id %}">{{ category.name }}</a>
+                <a href="{% url 'portfolio_by_category' category.id %}"
+                    class="{% if selected_category and selected_category.id == category.id %}active{% endif %}">
+                    {{ category.name }}
+                </a>
             {% endfor %}
         </nav>
 
