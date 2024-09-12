@@ -53,7 +53,7 @@
         <div class="image-grid">
             {% for image in images %}
                 <div class="img-container">
-                    <img class="studio-img" src="{{ image.url }}" alt="{{ image.title }}">
+                    <img class="studio-img" src="{{ image.image.url }}" alt="{{ image.title }}">
                 </div>
             {% empty %}
                 <p>No images available</p>

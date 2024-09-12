@@ -1,5 +1,6 @@
 """ Models module for MySQL
 """
+import os
 from django.db import models
 from django.utils import timezone
 
@@ -22,6 +23,7 @@ class Image(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     url = models.URLField(max_length=1000)
+    image = models.ImageField(upload_to='images/')
     photographer = models.ForeignKey(
         "Photographer", related_name="images", on_delete=models.CASCADE
     )
@@ -32,6 +34,10 @@ class Image(models.Model):
         """ Returns the string representation of the image title
         """
         return self.title
+
+    @property
+    def filename(self):
+        return os.path.basename(self.image.name)
 
 
 class Photographer(models.Model):
