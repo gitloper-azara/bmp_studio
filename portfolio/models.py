@@ -3,6 +3,8 @@
 import os
 from django.db import models
 from django.utils import timezone
+from imagekit.models import ImageSpecField
+from imagekit.processors import resize
 
 
 class Category(models.Model):
@@ -24,6 +26,12 @@ class Image(models.Model):
     description = models.TextField(blank=True, null=True)
     url = models.URLField(max_length=1000)
     image = models.ImageField(upload_to='images/')
+    thumbnail = ImageSpecField(
+        source='image',
+        processors=[resize.ResizeToFit(500, 500)],
+        format='JPEG',
+        options={'quality': 70}
+    )
     photographer = models.ForeignKey(
         "Photographer", related_name="images", on_delete=models.CASCADE
     )

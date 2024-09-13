@@ -7,6 +7,7 @@
         <title>Portfolio - BMP Studio</title>
         {% load static %}
         <link rel="icon" href="{% static 'images/bmpstudio_web_icon.png' %}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css">
         <link rel="stylesheet" type="text/css" href="{% static 'common.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'footer.css' %}">
@@ -51,9 +52,11 @@
 
         <div class="image-grid">
             {% for image in images %}
-                <div class="img-container">
-                    <img class="studio-img" src="{{ image.image.url }}" alt="{{ image.title }}">
-                </div>
+            <div class="img-container">
+                <a href="{{ image.image.url }}" data-fancybox="gallery" data-caption="{{ image.description }}">
+                    <img class="lazyload" src="{{ image.thumbnail.url }}" alt="{{ image.title }}">
+                </a>
+            </div>
             {% empty %}
                 <p>No images available</p>
             {% endfor %}
@@ -82,6 +85,7 @@
                 </div>
             </div>
         </footer>
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
         <script src="{% static 'script/script.js' %}"></script>
     </body>
 </html>

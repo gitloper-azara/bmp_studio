@@ -37,7 +37,7 @@ h1, h3 {
 
 .image-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-auto-rows: auto;
     gap: 6px;
     justify-content: center;
