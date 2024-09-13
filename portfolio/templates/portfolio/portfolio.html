@@ -53,8 +53,8 @@
         <div class="image-grid">
             {% for image in images %}
             <div class="img-container">
-                <a href="{{ image.image.url }}" data-fancybox="gallery" data-caption="{{ image.description }}">
-                    <img class="lazyload" src="{{ image.thumbnail.url }}" alt="{{ image.title }} - Photo by {{ photographer.name }}" loading="lazy">
+                <a href="{{ image.image.url }}" data-fancybox="gallery" data-caption="{{ image.description }} - Photo by {{ image.photographer.name }}">
+                    <img class="lazyload" src="{{ image.thumbnail.url }}" alt="{{ image.title }} - Photo by {{ image.photographer.name }}" loading="lazy">
                 </a>
             </div>
             {% empty %}
