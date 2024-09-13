@@ -85,7 +85,7 @@ h1 {
 @media (max-width: 768px) {
     body {
         padding-top: 20px;
-        padding-right: 0;
+        padding-right: 5px;
         padding-left: 0;
     }
 
