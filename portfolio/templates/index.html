@@ -11,9 +11,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'common.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'footer.css' %}">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'top.css' %}">
     </head>
     <body>
         <header>
@@ -37,6 +35,7 @@
             </div>
         </header>
         <h1>Capturing Moments, Crafting Memories &ndash; Discover the Art of Photography with BMP Studio</h1>
+        <button id="backToTopBtn" title="Got to top">Top</button>
         <div class="image-grid">
             {% for image in images %}
             <div class="img-container" data-aspect-ratio="{{ image.width }}/{{ image.height }}">
@@ -47,7 +46,6 @@
             {% empty %}
                 <p>No images available</p>
             {% endfor %}
-            <button id="backToTopBtn" title="Got to top">Top</button>
         </div>
         <footer>
             <div class="footer_container">

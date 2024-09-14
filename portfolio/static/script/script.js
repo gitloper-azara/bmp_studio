@@ -58,3 +58,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const lazyImages = document.querySelectorAll('img.lazyload');
   lazyImages.forEach(img => lazyImageObserver.observe(img));
 });
+
+// show button when user begins scrolling
+window.addEventListener('scroll', () => {
+  const backToTopBtn = document.getElementById('backToTopBtn');
+
+  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+    backToTopBtn.style.display = 'block';
+  } else {
+    backToTopBtn.style.display = 'none';
+  }
+});
+
+// scroll to the top when user clicks on the button
+document.getElementById('backToTopBtn').addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
