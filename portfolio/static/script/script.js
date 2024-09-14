@@ -23,18 +23,48 @@ menuBtn.addEventListener('click', () => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  let lazyImages = document.querySelectorAll("img.lazy");
-  let observer = new IntersectionObserver((entries, observer) => {
+document.querySelectorAll('.img-container img').forEach((img) => {
+  img.onload = () => {
+    if (img.naturalWidth > img.naturalHeight) {
+      img.parentElement.classList.add('landscape');
+    } else {
+      img.parentElement.classList.add('portrait');
+    }
+  };
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const grid = document.querySelector('.image-grid');
+  const items = grid.querySelectorAll('.img-container');
+
+  const resizeGridItem = (item) => {
+    const aspectRatio = item.dataset.aspectRatio.split('/');
+    const rowSpan = Math.ceil((aspectRatio[1] / aspectRatio[0]) * (item.clientWidth / 10));
+    item.style.gridRowEnd = `span ${rowSpan}`;
+
+    if (aspectRatio[0] / aspectRatio[1] > 1.5) item.classList.add('wide');
+    if (aspectRatio[1] / aspectRatio[0] > 1.5) item.classList.add('tall');
+    if (aspectRatio[0] / aspectRatio[1] > 1.5 && aspectRatio[1] / aspectRatio[0] > 1.5) item.classList.add('big');
+  };
+
+  const resizeAllGridItems = () => {
+    items.forEach(resizeGridItem);
+  };
+
+  resizeAllGridItems();
+  window.addEventListener('resize', resizeAllGridItems);
+
+  const lazyImages = document.querySelectorAll('img.lazyload');
+  const lazyImageObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        let img = entry.target;
+        const img = entry.target;
         img.src = img.dataset.src;
-        img.classList.remove("lazy");
+        img.classList.add('loaded');
         observer.unobserve(img);
       }
     });
   });
 
-  lazyImages.forEach(img => observer.observe(img));
+  lazyImages.forEach(img => lazyImageObserver.observe(img));
 });
