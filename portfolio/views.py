@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from django.core.mail import send_mail
 from .models import Image, Category, ContactForm
-from rest_framework import generics
-from .serializers import ImageSerializer
+from rest_framework import generics, status
+from .serializers import ImageSerializer, UserRegistrationSerializer
+from django.contrib.auth.models import User
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class ImageListAPIView(generics.ListCreateAPIView):
@@ -10,6 +14,7 @@ class ImageListAPIView(generics.ListCreateAPIView):
     """
     queryset = Image.objects.all().order_by("-created_at")
     serializer_class = ImageSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
 
 
 class ImageDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -17,6 +22,29 @@ class ImageDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+
+class UserRegistrationView(generics.CreateAPIView):
+    """ User registration view
+    """
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = UserRegistrationSerializer
+
+    def post(self, request, *args, **kwargs):
+        """ handle new user creation post request
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+
+        # generate tokens here
+        refresh = RefreshToken.for_user(user=user)
+        return Response({
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+        }, status=status.HTTP_201_CREATED)
 
 
 def index(request):
