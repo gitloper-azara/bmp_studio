@@ -10,6 +10,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'common.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'footer.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'form.css' %}">
     </head>
     <body>
         <header>
@@ -33,6 +34,26 @@
             </div>
         </header>
         <h1>Contact Us</h1>
+
+        <!-- Contact Form -->
+
+        {% load widget_tweaks %}
+        <form method="POST" class="contact-form">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.name.label_tag }}
+                {{ form.name|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.email.label_tag }}
+                {{ form.email|add_class:"form-control" }}
+            </div>
+            <div class="form-group">
+                {{ form.message.label_tag }}
+                {{ form.message|add_class:"form-control" }}
+            </div>
+            <button type="submit" class="btn-submit">Send Message</button>
+        </form>
         <footer>
             <div class="footer_container">
                 <div class="socials">

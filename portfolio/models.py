@@ -3,6 +3,7 @@
 import os
 from django.db import models
 from django.utils import timezone
+from django import forms
 from imagekit.models import ImageSpecField
 from imagekit.processors import resize
 
@@ -60,3 +61,11 @@ class Photographer(models.Model):
         """ Returns the string representation of the photographer's name
         """
         return self.name
+
+
+class ContactForm(forms.Form):
+    """ Contact form for bookings
+    """
+    name = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    message = forms.CharField(widget=forms.Textarea)
