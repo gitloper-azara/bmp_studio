@@ -1,6 +1,22 @@
 from django.shortcuts import render
 from django.core.mail import send_mail
 from .models import Image, Category, ContactForm
+from rest_framework import generics
+from .serializers import ImageSerializer
+
+
+class ImageListAPIView(generics.ListCreateAPIView):
+    """ Image List API View class
+    """
+    queryset = Image.objects.all().order_by("-created_at")
+    serializer_class = ImageSerializer
+
+
+class ImageDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """ Image Detail API View
+    """
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
 
 
 def index(request):
