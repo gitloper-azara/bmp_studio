@@ -5,3 +5,4 @@ Pillow>=9.0,<10.0
 django-imagekit
 django-widget-tweaks
 djangorestframework
+djangorestframework-simplejwt
