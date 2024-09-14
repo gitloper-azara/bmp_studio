@@ -51,7 +51,7 @@ def contact(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             send_mail(
-                f"Message from {form.cleaned_data['name']}",
+                f"Message from {form.cleaned_data['name']} on BMP Studio's Website",
                 form.cleaned_data['message'],
                 form.cleaned_data['email'],
                 [
