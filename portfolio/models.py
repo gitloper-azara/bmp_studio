@@ -6,6 +6,8 @@ from django.utils import timezone
 from django import forms
 from imagekit.models import ImageSpecField
 from imagekit.processors import resize
+from PIL import Image as PILImage
+import os
 
 
 class Category(models.Model):
@@ -33,6 +35,8 @@ class Image(models.Model):
         format='JPEG',
         options={'quality': 70}
     )
+    width = models.PositiveIntegerField(null=True, blank=True)
+    height = models.PositiveIntegerField(null=True, blank=True)
     photographer = models.ForeignKey(
         "Photographer", related_name="images", on_delete=models.CASCADE
     )
@@ -47,6 +51,14 @@ class Image(models.Model):
     @property
     def filename(self):
         return os.path.basename(self.image.name)
+
+    def save(self, *args, **kwargs):
+        """"""
+        super().save(*args, **kwargs)
+        if self.image and not self.width and not self.height:
+            with PILImage.open(self.image.path) as img:
+                self.width, self.height = img.size
+                super().save(update_fields=['width', 'height'])
 
 
 class Photographer(models.Model):
