@@ -23,28 +23,26 @@ menuBtn.addEventListener('click', () => {
   }
 });
 
-document.querySelectorAll('.img-container img').forEach((img) => {
-  img.onload = () => {
-    if (img.naturalWidth > img.naturalHeight) {
-      img.parentElement.classList.add('landscape');
-    } else {
-      img.parentElement.classList.add('portrait');
-    }
-  };
-});
-
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.image-grid');
   const items = grid.querySelectorAll('.img-container');
 
   const resizeGridItem = (item) => {
     const aspectRatio = item.dataset.aspectRatio.split('/');
-    const rowSpan = Math.ceil((aspectRatio[1] / aspectRatio[0]) * (item.clientWidth / 10));
+    const width = parseFloat(aspectRatio[0])
+    const height = parseFloat(aspectRatio[1])
+    const rowSpan = Math.ceil((height / width) * (item.clientWidth / 10));
     item.style.gridRowEnd = `span ${rowSpan}`;
 
-    if (aspectRatio[0] / aspectRatio[1] > 1.5) item.classList.add('wide');
-    if (aspectRatio[1] / aspectRatio[0] > 1.5) item.classList.add('tall');
-    if (aspectRatio[0] / aspectRatio[1] > 1.5 && aspectRatio[1] / aspectRatio[0] > 1.5) item.classList.add('big');
+    // if an image is wider than 1.5 times its height, classify it as wide
+    // if an image is taller than 1.5 times its width, classify it as tall
+    if (width / height > 1.5) {
+      item.classList.add('wide');
+    } else if (height / width > 1.5) {
+      item.classList.add('tall');
+    } else {
+      item.classList.add('big');
+    }
   };
 
   const resizeAllGridItems = () => {

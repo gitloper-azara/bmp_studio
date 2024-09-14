@@ -52,7 +52,7 @@
 
         <div class="image-grid">
             {% for image in images %}
-            <div class="img-container" data-aspect-ratio="{{ image.width|default:1 }}/{{ image.height|default:1 }}">
+            <div class="img-container" data-aspect-ratio="{{ image.width }}/{{ image.height }}">
                 <a href="{{ image.image.url }}" data-fancybox="gallery" data-caption="{{ image.description }} - Photo by {{ image.photographer.name }}">
                     <img class="lazyload" data-src="{{ image.thumbnail.url }}" alt="{{ image.title }} - Photo by {{ image.photographer.name }}" loading="lazy">
                 </a>
