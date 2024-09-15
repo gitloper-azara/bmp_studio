@@ -39,7 +39,7 @@ h1 {
 .image-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 4px;
     justify-content: center;
 }
 
@@ -59,7 +59,7 @@ h1 {
 }
 
 .img-container:hover {
-    border-radius: 4px;
+    border-radius: 8px;
     transform: scale(1.02);
     z-index: 1;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -98,7 +98,7 @@ h1 {
     body {
         padding-top: 20px;
         padding-right: 5px;
-        padding-left: 0;
+        padding-left: 5px;
     }
 
     .nav_items_p {
@@ -113,7 +113,7 @@ h1 {
     }
 
     .img-container {
-        flex: 1 1 100%;
+        flex: 1 2 100%;
     }
 
     .img-container.wide,

@@ -16,9 +16,12 @@
     <body>
         <header>
             <div class="header_container"> <!-- Nav container -->
+                <!-- Left side: BMP Logo -->
                 <a href="{% url 'index' %}" class="background_link">
                     <img src="{% static 'images/bmplogo_black_stacked.png' %}" alt="Home">
                 </a>
+
+                <!-- Center: Navigation items  -->
                 <nav class="nav_items" id="navItemsMenu">
                     <a href="{% url 'index' %}">Home</a>
                     <a href="{% url 'portfolio' %}" class="active">Portfolio</a>
@@ -27,6 +30,20 @@
                     <a href="{% url 'contact' %}">Contact</a>
                     <a href="{% url 'blogs' %}">Blogs</a>
                 </nav>
+
+                 <!-- Right side: Menu button (for mobile view or login/signup) -->
+                <div class="auth_buttons" id="authButtons">
+                    <form action="{% url 'login' %}" method="post" style="display: inline;">
+                        {% csrf_token %} <!-- Include for POST resquests in Django -->
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+                    <form action="{% url 'register' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">Sign Up</button>
+                    </form>
+                </div>
+
+                <!-- Optional: Menu butoon for mobile view -->
                 <div class="menu-btn" id="menuBtn">
                     <span></span>
                     <span></span>

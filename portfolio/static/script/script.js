@@ -9,6 +9,7 @@ navItems.forEach(item => {
 
 const menuBtn = document.getElementById('menuBtn');
 const navItemsMenu = document.getElementById('navItemsMenu');
+const authButtons = document.getElementById('authButtons');
 let menuOpen = false;
 
 menuBtn.addEventListener('click', () => {
@@ -16,10 +17,12 @@ menuBtn.addEventListener('click', () => {
     menuBtn.classList.add('open');
     navItemsMenu.style.display = 'block';
     menuOpen = true;
+    authButtons.classList.toggle('show');
   } else {
     menuBtn.classList.remove('open');
     navItemsMenu.style.display = 'none';
     menuOpen = false;
+    authButtons.classList.remove('show');
   }
 });
 
