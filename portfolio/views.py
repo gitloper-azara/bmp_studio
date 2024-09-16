@@ -6,7 +6,7 @@ from .models import Image, Category, ContactForm
 from rest_framework import generics, status, views
 from .serializers import ImageSerializer, UserRegistrationSerializer
 from django.contrib import messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.http import HttpRequest, JsonResponse
 from django.views import View
@@ -65,12 +65,15 @@ class LoginView(View):
     """ Custom login view
     """
     def post(self, request):
-        """ Post function
+        """ Handle POST login requests
         """
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
         if user:
+            # log the user in by creating a session
+            login(request, user)
+            # use JWT auth after logging in
             view = TokenObtainPairView.as_view()
             response = view(request)
             if response.status_code == 200:
@@ -78,7 +81,7 @@ class LoginView(View):
         return JsonResponse({ "error": "Invalid credentials" }, status=400)
 
     def get(self, request):
-        """ Get function
+        """ Handle GET requests, returns a CSRF token
         """
         csrf_token = get_token(request)
         return JsonResponse({ "csrf_token": csrf_token })

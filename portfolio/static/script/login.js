@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // redirect to the dashboard
             window.location.href = "/dashboard/";
           } else {
-            console.error(`Login failed: ${data}`);
+            alert(`Invalid credentials. Please try again.`);
           }
         })
         .catch(error => {
