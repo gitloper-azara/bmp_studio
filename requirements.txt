@@ -6,3 +6,4 @@ django-imagekit
 django-widget-tweaks
 djangorestframework
 djangorestframework-simplejwt
+django-cors-headers

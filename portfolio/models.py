@@ -2,6 +2,7 @@
 """
 import os
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils import timezone
 from django import forms
 from imagekit.models import ImageSpecField
@@ -25,6 +26,7 @@ class Category(models.Model):
 class Image(models.Model):
     """ Image class
     """
+    client = models.ManyToManyField(User, related_name="client_images", blank=True)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     url = models.URLField(max_length=1000)

@@ -8,14 +8,15 @@
         {% load static %}
         <link rel="icon" href="{% static 'images/bmpstudio_web_icon.png' %}">
         <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+        <link rel="stylesheet" href="{% static 'form.css' %}">
     </head>
     <body>
         <header>
-            <nav>
-                <ul>
-                    <li><a href="{% url 'upload-image' %}">Upload Image</a></li>
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
-                </ul>
+            <nav class="auth-form">
+                <form id="logout-form" method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-submit">Logout</button>
+                </form>
             </nav>
             <h1>{{ user.username }}'s Dashboard</h1>
         </header>
@@ -27,7 +28,7 @@
                     <div class="image-card">
                         <img src="{{ image.thumbnail.url }}" alt="{{ image.title }}">
                         <a href="{{ image.url }}" download>Download</a>
-                        <a href="{% url 'delete-image' image.id %}" class="delete-btn">Delete</a>
+                        <a href="{% url 'delete_image' image.id %}" class="delete-btn">Delete</a>
                     </div>
                 {% empty %}
                     <p>You have no uploaded images. Contact your photographer!</p>

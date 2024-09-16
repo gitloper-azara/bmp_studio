@@ -1,16 +1,26 @@
 from typing import Any
-from django.shortcuts import render
+from django.http.response import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import send_mail
 from .models import Image, Category, ContactForm
 from rest_framework import generics, status, views
 from .serializers import ImageSerializer, UserRegistrationSerializer
+from django.contrib import messages
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.http import HttpRequest, JsonResponse
+from django.views import View
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.views import TokenObtainPairView
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
+from django.middleware.csrf import get_token
 
 
 class ImageListAPIView(generics.ListCreateAPIView):
@@ -51,6 +61,29 @@ class UserRegistrationView(generics.CreateAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
+class LoginView(View):
+    """ Custom login view
+    """
+    def post(self, request):
+        """ Post function
+        """
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            view = TokenObtainPairView.as_view()
+            response = view(request)
+            if response.status_code == 200:
+                return JsonResponse(response.data)
+        return JsonResponse({ "error": "Invalid credentials" }, status=400)
+
+    def get(self, request):
+        """ Get function
+        """
+        csrf_token = get_token(request)
+        return JsonResponse({ "csrf_token": csrf_token })
+
+
 class UserLoginView(TemplateView):
     """ Custom user login page
     """
@@ -64,20 +97,38 @@ class UserRegisterView(TemplateView):
 
 
 @method_decorator(login_required, name='dispatch')
-class UserDashboardView(TemplateView):
-    """ User dashboard view that displays images for the logged-in user
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+class UserDashboardView(LoginRequiredMixin, TemplateView):
+    """ User dashboard view that displays images for the logged-in client
     """
     template_name = "dashboard/dashboard.html"
 
     def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
+        """ Get context data
+        """
         context = super().get_context_data(**kwargs)
 
         # get logged-in user
         user = self.request.user
 
         # retrieve images related to the logged-in user
-        context['images'] = Image.objects.filter(photographer=user).order_by("-created_at")
+        context['images'] = user.client_images.order_by("-created_at")
         return context
+
+
+class DeleteImageView(LoginRequiredMixin, View):
+    """ Delete image functionality for authenticated users
+    """
+    def post(self, request, id):
+        """ post request with an image id
+        """
+        image = get_object_or_404(Image, id=id, user=request.user)
+
+        image.delete()
+        messages.success(request, "Image deleted successfully.")
+
+        return redirect("dashboard")
 
 
 def index(request):
