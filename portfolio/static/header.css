@@ -111,6 +111,7 @@ a:active {
 @media (max-width: 860px) {
     .header_container {
         padding: 10px 20px;
+        position: relative;
     }
 
     .background_link {

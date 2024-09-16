@@ -43,8 +43,15 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = ["username", "password", "email"]
 
+    def validate_email(self, email):
+        """ Validate that the email provided is unique
+        """
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError("Email is already in use.")
+        return email
+
     def create(self, validated_data):
-        """ create method that creates a new user with hashed pwd
+        """ Create method that creates a new user with a hashed pwd
         """
         user = User.objects.create_user(
             username=validated_data['username'],

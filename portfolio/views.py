@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.core.mail import send_mail
 from .models import Image, Category, ContactForm
-from rest_framework import generics, status
+from rest_framework import generics, status, views
 from .serializers import ImageSerializer, UserRegistrationSerializer
 from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.views.generic import TemplateView
 
 
 class ImageListAPIView(generics.ListCreateAPIView):
@@ -45,6 +46,18 @@ class UserRegistrationView(generics.CreateAPIView):
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         }, status=status.HTTP_201_CREATED)
+
+
+class UserLoginView(TemplateView):
+    """ Custom user login page
+    """
+    template_name = "login.html"
+
+
+class UserRegisterView(TemplateView):
+    """ Custome user registeration view
+    """
+    template_name = "register.html"
 
 
 def index(request):

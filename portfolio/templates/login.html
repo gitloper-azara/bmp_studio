@@ -4,64 +4,58 @@
         <meta charset="UTF-8">
         <meta name="author" content="Yushahu Yussif Azara">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>BMP Studio</title>
+        <title>Contact Us - BMP Studio</title>
         {% load static %}
         <link rel="icon" href="{% static 'images/bmpstudio_web_icon.png' %}">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css">
         <link rel="stylesheet" type="text/css" href="{% static 'common.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'footer.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'top.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'form.css' %}">
     </head>
     <body>
         <header>
             <div class="header_container"> <!-- Nav container -->
-                <!-- Left side: BMP Logo -->
                 <a href="{% url 'index' %}" class="background_link">
                     <img src="{% static 'images/bmplogo_black_stacked.png' %}" alt="Home">
                 </a>
-
-                <!-- Center: Navigation items  -->
                 <nav class="nav_items" id="navItemsMenu">
-                    <a href="{% url 'index' %}" class="active">Home</a>
+                    <a href="{% url 'index' %}">Home</a>
                     <a href="{% url 'portfolio' %}">Portfolio</a>
                     <a href="{% url 'videos' %}">Videos</a>
                     <a href="{% url 'about' %}">About</a>
                     <a href="{% url 'contact' %}">Contact</a>
                     <a href="{% url 'blogs' %}">Blogs</a>
                 </nav>
-
-                <!-- Optional: Menu button for mobile view -->
                 <div class="menu-btn" id="menuBtn">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
-
-                <!-- Right side: Menu button (for mobile view or login/signup) -->
-                <div class="auth_buttons" id="authButtons">
-                    <form action="{% url 'user-login' %}" method="get" style="display: inline;">
-                        <button type="submit" class="btn">Login</button>
-                    </form>
-                    <form action="{% url 'register-user' %}" method="get" style="display: inline;">
-                        <button type="submit" class="btn">SignUp</button>
-                    </form>
-                </div>
             </div>
         </header>
-        <h1>Capturing Moments, Crafting Memories &ndash; Discover the Art of Photography with BMP Studio</h1>
-        <button id="backToTopBtn" title="Got to top">Top</button>
-        <div class="image-grid">
-            {% for image in images %}
-            <div class="img-container" data-aspect-ratio="{{ image.width }}/{{ image.height }}">
-                <a href="{{ image.image.url }}" data-fancybox="gallery" data-caption="{{ image.description }} - Photo by {{ image.photographer.name }}">
-                    <img class="lazyload" data-src="{{ image.thumbnail.url }}" alt="{{ image.title }} by {{ image.photographer.name }}" loading="lazy">
-                </a>
+        <h1>Log in as an existing client to manage your images</h1>
+
+        <!-- Login Form -->
+
+        {% load widget_tweaks %}
+        <form method="POST" action="{% url 'login' %}" class="contact-form">
+            {% csrf_token %}
+            <div class="form-group"></div>
+                <label for="id_username">Username</label>
+                <input type="text" name="username" class="form-control" id="id_username" required>
+                {% if form.username.errors %}
+                    <div class="error">{{ form.username.errors }}</div>
+                {% endif %}
             </div>
-            {% empty %}
-                <p>No images available</p>
-            {% endfor %}
-        </div>
+            <div class="form-group">
+                <label for="id_password">Password</label>
+                <input type="text" name="password" class="form-control" id="id_password" required>
+                {% if form.password.errors %}
+                    <div class="error">{{ form.password.errors }}</div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn-submit">Login</button>
+        </form>
         <footer>
             <div class="footer_container">
                 <div class="socials">
@@ -86,7 +80,6 @@
                 </div>
             </div>
         </footer>
-        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
         <script src="{% static 'script/script.js' %}"></script>
     </body>
 </html>
