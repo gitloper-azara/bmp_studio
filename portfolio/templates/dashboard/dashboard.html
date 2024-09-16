@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="Yushahu Yussif Azara">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BMP Studio - User Dashboard</title>
+        {% load static %}
+        <link rel="icon" href="{% static 'images/bmpstudio_web_icon.png' %}">
+        <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'upload-image' %}">Upload Image</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </nav>
+            <h1>{{ user.username }}'s Dashboard</h1>
+        </header>
+
+        <section class="dashboard-container">
+            <h2>My Images</h2>
+            <div class="image-grid">
+                {% for image in images %}
+                    <div class="image-card">
+                        <img src="{{ image.thumbnail.url }}" alt="{{ image.title }}">
+                        <a href="{{ image.url }}" download>Download</a>
+                        <a href="{% url 'delete-image' image.id %}" class="delete-btn">Delete</a>
+                    </div>
+                {% empty %}
+                    <p>You have no uploaded images. Contact your photographer!</p>
+                {% endfor %}
+            </div>
+        </section>
+    </body>
+</html>

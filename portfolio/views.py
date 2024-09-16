@@ -1,3 +1,4 @@
+from typing import Any
 from django.shortcuts import render
 from django.core.mail import send_mail
 from .models import Image, Category, ContactForm
@@ -8,6 +9,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 class ImageListAPIView(generics.ListCreateAPIView):
@@ -58,6 +61,23 @@ class UserRegisterView(TemplateView):
     """ Custome user registeration view
     """
     template_name = "register.html"
+
+
+@method_decorator(login_required, name='dispatch')
+class UserDashboardView(TemplateView):
+    """ User dashboard view that displays images for the logged-in user
+    """
+    template_name = "dashboard/dashboard.html"
+
+    def get_context_data(self, **kwargs: Any) -> "dict[str, Any]":
+        context = super().get_context_data(**kwargs)
+
+        # get logged-in user
+        user = self.request.user
+
+        # retrieve images related to the logged-in user
+        context['images'] = Image.objects.filter(photographer=user).order_by("-created_at")
+        return context
 
 
 def index(request):

@@ -22,6 +22,9 @@ urlpatterns = [
     path("login/", TokenObtainPairView.as_view(), name="login"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 
+    # user dashboard
+    path("dashboard/", views.UserDashboardView.as_view(), name="dashboard"),
+
     # api endpoints
     path("api/images", views.ImageListAPIView.as_view(), name="image-list"),
     path("api/images/<int:pk>/", views.ImageDetailAPIView.as_view(), name="image-detail")
