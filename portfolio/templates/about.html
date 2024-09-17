@@ -25,6 +25,19 @@
                     <a href="{% url 'contact' %}">Contact</a>
                     <a href="{% url 'blogs' %}">Blogs</a>
                 </nav>
+
+                <!-- Right side: Menu button (for mobile view or login/signup) -->
+                <div class="auth_buttons" id="authButtons">
+                    <form action="{% url 'login' %}" method="post" style="display: inline;">
+                        {% csrf_token %} <!-- Include for POST resquests in Django -->
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+                    <form action="{% url 'register' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">SignUp</button>
+                    </form>
+                </div>
+
                 <div class="menu-btn" id="menuBtn">
                     <span></span>
                     <span></span>

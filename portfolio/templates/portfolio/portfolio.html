@@ -31,7 +31,7 @@
                     <a href="{% url 'blogs' %}">Blogs</a>
                 </nav>
 
-                 <!-- Right side: Menu button (for mobile view or login/signup) -->
+                <!-- Right side: Menu button (for mobile view or login/signup) -->
                 <div class="auth_buttons" id="authButtons">
                     <form action="{% url 'login' %}" method="post" style="display: inline;">
                         {% csrf_token %} <!-- Include for POST resquests in Django -->

@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Videos - BMP Studio</title>
         {% load static %}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css"/>
         <link rel="icon" href="{% static 'images/bmpstudio_web_icon.png' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'common.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
@@ -25,6 +26,19 @@
                     <a href="{% url 'contact' %}">Contact</a>
                     <a href="{% url 'blogs' %}">Blogs</a>
                 </nav>
+
+                <!-- Right side: Menu button (for mobile view or login/signup) -->
+                <div class="auth_buttons" id="authButtons">
+                    <form action="{% url 'login' %}" method="post" style="display: inline;">
+                        {% csrf_token %} <!-- Include for POST resquests in Django -->
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+                    <form action="{% url 'register' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">SignUp</button>
+                    </form>
+                </div>
+
                 <div class="menu-btn" id="menuBtn">
                     <span></span>
                     <span></span>
@@ -32,6 +46,22 @@
                 </div>
             </div>
         </header>
+        <h1>Videos</h1>
+            <div class="video-grid">
+                {% for video in videos %}
+                    <div class="video-item">
+                        <a href="{{ video.video.url }}" data-fancybox="gallery" data-caption="{{ video.description }}">
+                            {% if video.thumbnail_small %}
+                                <img src="{{ video.thumbnail_small.url }}" alt="{{ video.title }}">
+                            {% else %}
+                                <div class="video-placeholder">{{ video.title }}</div>
+                            {% endif %}
+                        </a>
+                    </div>
+                {% empty %}
+                    <p>No video available</p>
+                {% endfor %}
+            </div>
         <footer>
             <div class="footer_container">
                 <div class="socials">
@@ -56,6 +86,7 @@
                 </div>
             </div>
         </footer>
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
         <script src="{% static 'script/script.js' %}"></script>
     </body>
 </html>
