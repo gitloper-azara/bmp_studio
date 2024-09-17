@@ -2,7 +2,7 @@ from typing import Any
 from django.http.response import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import send_mail
-from .models import Image, Category, ContactForm
+from .models import Image, Category, ContactForm, Video
 from rest_framework import generics, status, views
 from .serializers import ImageSerializer, UserRegistrationSerializer
 from django.contrib import messages
@@ -198,7 +198,10 @@ def contact(request):
 
 
 def videos(request):
-    return render(request, "videos.html")
+    """ route for videos
+    """
+    videos = Video.objects.all().order_by("-created_at")
+    return render(request, "videos.html", {"videos": videos})
 
 
 def blogs(request):

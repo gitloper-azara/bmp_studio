@@ -83,3 +83,19 @@ class ContactForm(forms.Form):
     name = forms.CharField(max_length=100)
     email = forms.EmailField()
     message = forms.CharField(widget=forms.Textarea)
+
+
+class Video(models.Model):
+    """ Video class
+    """
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    url = models.URLField(max_length=1000)
+    thumbnail = models.ImageField(upload_to="video_thumbnails/", blank=True, null=True)
+    photographer = models.ForeignKey(Photographer, related_name="videos", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        """ Return string representation of Video class
+        """
+        return self.title
