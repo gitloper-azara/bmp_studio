@@ -7,6 +7,7 @@
         <title>Contact Us - BMP Studio</title>
         {% load static %}
         <link rel="icon" href="{% static 'images/bmpstudio_web_icon.png' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
         <link rel="stylesheet" type="text/css" href="{% static 'common.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'header.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'footer.css' %}">
@@ -49,7 +50,12 @@
             </div>
             <div class="form-group">
                 <label for="id_password">Password</label>
-                <input type="text" name="password" class="form-control" id="id_password" required>
+                <div class="password-input-wrapper">
+                    <input type="password" name="password" class="form-control" id="id_password" required autocomplete="new-password">
+                    <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
                 {% if form.password.errors %}
                     <div class="error">{{ form.password.errors }}</div>
                 {% endif %}
@@ -82,5 +88,6 @@
             </div>
         </footer>
         <script src="{% static 'script/login.js' %}"></script>
+        <script src="{% static 'script/toggleEye.js' %}"></script>
     </body>
 </html>
