@@ -43,7 +43,45 @@
                 </div>
             </div>
         </header>
-        <h1>About Us</h1>
+        <h1 class="about-title">About Us</h1>
+        <div class="about-text">
+            <p>
+                At <strong>Brothers Media Production</strong>, we are passionate about capturing life's most memorable moments.
+                Our team of experienced photographers and videographers specializes in delivering high-quality visuals for weddings, products, advertisments, documentaries and more.
+                With a commitment to excellence and a creative touch, we turn ordinary moments into extraordinary stories, that stay with you for life.
+                Whether you are looking to capture special moments or create stunning visual content, <strong>BMP Studio</strong> is here to bring your vision to life.
+                Checkout our stunning images by visiting our <a href="{% url 'portfolio' %}" class="active">portfolio</a> or engaging videos by visiting our <a href="{% url 'videos' %}" class="active">videos page</a>.
+                Want to discuss a project instead? Send us a message <a href="{% url 'contact' %}" class="active">here</a>.
+            </p>
+        </div>
+        <h1 class="about-title" id="aboutTitle">Meet The Team</h1>
+        <div class="team-section">
+            <div class="team-member">
+                <img src="{% static 'images/team/iddiction.jpg' %}" alt="Iddris Mohammed" class="member-image">
+                <h2>Iddris Mohammed</h2>
+                <h3>Leader, CEO of BMP Studio</h3>
+                <p class="about-text">Iddris Mohammed is the leader, CEO of BMP Studio. He is a seasoned photographer and videographer with over 10 years of experience working with
+                    diverse clients in both the public and private sectors. Iddris' entrepreneurial zeal had led him to establish and operate BMP Studio, where he has proven
+                    to be able to apply skills and creativity to bring to life, lasting memories, for clients he has worked for.
+                </p>
+            </div>
+            <div class="team-member">
+                <img src="{% static 'images/team/azara.jpg' %}" alt="Yushahu Yussif Azara" class="member-image">
+                <h2>Yushahu Yussif Azara</h2>
+                <h3>Director</h3>
+                <p class="about-text">Yushahu Yussif Azara is a seasoned photographer and videographer with over five years of experience in the field. He also serves as the team's software engineer, bringing a unique blend of creativity and technical expertise.
+                    With a keen eye for detail, Yushahu leads the BMP Studio platform, ensuring both artistic excellence and a seamless user experience.</p>
+
+            </div>
+            <div class="team-member">
+                <img src="{% static 'images/team/gabriel.jpg' %}" alt="Gabriel Asampana" class="member-image">
+                <h2>Gabriel Asampana</h2>
+                <h3>Visual and Creative Lead</h3>
+                <p class="about-text">With a keen eye for design principles, Gabriel fosters an environment that encourages creativity both within the team and beyond.
+                    He crafts innovative design strategies that empower clients to achieve their unique branding and visual goals.
+                </p>
+            </div>
+        </div>
         <footer>
             <div class="footer_container">
                 <div class="socials">

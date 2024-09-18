@@ -9,7 +9,7 @@ body {
     width: auto;
 }
 
-h1, h3 {
+h1, h2, h3 {
     text-align: center;
 }
 
@@ -93,6 +93,22 @@ h1 {
     opacity: 1;
 }
 
+.team-section .team-member img {
+    display: block;
+    width: 250px;
+    height: 100%;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.member-image {
+    transition: transform 0.3s ease;
+}
+
+.member-image:hover {
+    transform: scale(1.1);
+}
+
 /* mobile responsivesness */
 @media (max-width: 768px) {
     body {
@@ -120,5 +136,18 @@ h1 {
     .img-container.big {
         flex: 1 1 100%;
         height: auto;
+    }
+
+    .about-title {
+        margin-top: 60px;
+        margin-bottom: 10px;
+    }
+
+    #aboutTitle {
+        margin-bottom: 60px;
+    }
+
+    .about-text {
+        padding: 10px;
     }
 }
