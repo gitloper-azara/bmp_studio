@@ -7,6 +7,7 @@
         <title>BMP Studio - User Dashboard</title>
         {% load static %}
         <link rel="icon" href="{% static 'images/bmpstudio_web_icon.png' %}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css">
         <link rel="stylesheet" href="{% static 'dashboard.css' %}">
         <link rel="stylesheet" href="{% static 'form.css' %}">
     </head>
@@ -25,15 +26,21 @@
             <h2>My Images</h2>
             <div class="image-grid">
                 {% for image in images %}
-                    <div class="image-card">
-                        <img src="{{ image.thumbnail.url }}" alt="{{ image.title }}">
-                        <a href="{{ image.url }}" download>Download</a>
-                        <a href="{% url 'delete_image' image.id %}" class="delete-btn">Delete</a>
+                    <div class="img-container" data-aspect-ratio="{{ image.width }}/{{ image.height }}">
+                        <a href="{{ image.image.url }}" data-fancybox="gallery" data-caption="{{ image.description }} - Photo by {{ image.photographer.name }}">
+                            <img class="lazyload" data-src="{{ image.thumbnail.url }}" src="{{ image.thumbnail.url }}" alt="{{ image.title }}" loading="lazy">
+                        </a>
+                        <div class="img-actions">
+                            <a href="{{ image.image.url }}" download>Download</a>
+                            <a href="{% url 'delete_image' image.id %}" class="delete-btn">Delete</a>
+                        </div>
                     </div>
                 {% empty %}
                     <p>You have no uploaded images. Contact your photographer!</p>
                 {% endfor %}
             </div>
         </section>
+        <script src="{% static 'script/script.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
     </body>
 </html>
