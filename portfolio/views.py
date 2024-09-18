@@ -6,14 +6,15 @@ from .models import Image, Category, ContactForm, Video
 from rest_framework import generics, status, views
 from .serializers import ImageSerializer, UserRegistrationSerializer
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.models import User
 from django.http import HttpRequest, JsonResponse
 from django.views import View
+from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.views.generic import TemplateView
@@ -62,7 +63,7 @@ class UserRegistrationView(generics.CreateAPIView):
 
 
 class LoginView(View):
-    """ Custom login view
+    """ Custom login view for handling API requests
     """
     def post(self, request):
         """ Handle POST login requests
@@ -77,7 +78,9 @@ class LoginView(View):
             view = TokenObtainPairView.as_view()
             response = view(request)
             if response.status_code == 200:
-                return JsonResponse(response.data)
+                response_data = response.data
+                response_data['user_id'] = user.id
+                return JsonResponse(response_data)
         return JsonResponse({ "error": "Invalid credentials" }, status=400)
 
     def get(self, request):
@@ -87,10 +90,46 @@ class LoginView(View):
         return JsonResponse({ "csrf_token": csrf_token })
 
 
+class VerifyToken(APIView):
+    """ Token verification view
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        """ Handle POST request for token verification
+        """
+        token = request.auth
+        user_id = request.data.get('user_id')
+
+        if not token or not user_id:
+            return Response({ "is_valid": False, "error": "Invalid request" }, status=400)
+
+        try:
+            # verify that the token belongs to the claiming user
+            token_user = AccessToken(token).payload.get('user_id')
+            if int(token_user) != int(user_id):
+                raise ValueError("Token does not match user")
+
+            # verify that the user exists
+            User = get_user_model()
+            user = User.objects.get(id=user_id)
+
+            return Response({"is_valid": True, "username": user.username})
+        except (ValueError, User.DoesNotExist):
+            return Response({"is_valid": False, "error": "Invalid request"}, status=400)
+
+
 class UserLoginView(TemplateView):
     """ Custom user login page
     """
     template_name = "login.html"
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """ Redirect user to dashboard if already authenticated
+        """
+        if request.user.is_authenticated:
+            return redirect('dashboard')
+        return super().dispatch(request, *args, **kwargs)
 
 
 class UserRegisterView(TemplateView):
@@ -99,7 +138,7 @@ class UserRegisterView(TemplateView):
     template_name = "register.html"
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required(login_url='/user-login/'), name='dispatch')
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 class UserDashboardView(LoginRequiredMixin, TemplateView):

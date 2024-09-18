@@ -23,7 +23,7 @@ urlpatterns = [
     path("register/", views.UserRegistrationView.as_view(), name="register"),
     path("login/", views.LoginView.as_view(), name="login"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path("logout/", LogoutView.as_view(next_page=""), name="logout"),
+    path("logout/", LogoutView.as_view(next_page="index"), name="logout"),
 
     # user dashboard
     path("dashboard/", login_required(views.UserDashboardView.as_view()), name="dashboard"),
@@ -31,5 +31,6 @@ urlpatterns = [
 
     # api endpoints
     path("api/images", views.ImageListAPIView.as_view(), name="image-list"),
-    path("api/images/<int:pk>/", views.ImageDetailAPIView.as_view(), name="image-detail")
+    path("api/images/<int:pk>/", views.ImageDetailAPIView.as_view(), name="image-detail"),
+    path("api/verify-token/", views.VerifyToken.as_view(), name="verify-token"),
 ]
