@@ -13,13 +13,13 @@
     </head>
     <body>
         <header>
-            <nav class="auth-form">
+            <h1>{{ user.username }}'s Dashboard</h1>
+            <nav>
                 <form id="logout-form" method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn-submit">Logout</button>
+                    <button type="submit" class="logout-btn">Logout</button>
                 </form>
             </nav>
-            <h1>{{ user.username }}'s Dashboard</h1>
         </header>
 
         <section class="dashboard-container">

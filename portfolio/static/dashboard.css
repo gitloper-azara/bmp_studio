@@ -1,14 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Gravitas+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 /* General body styling */
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f9f9f9;
     color: #fff;
     margin: 0;
-    padding: 0;
+    padding-top: 100px;
+    overflow-x: hidden;
 }
 
 /* Header styling */
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     background-color: #fff;
     color: #333;
     padding: 15px 20px;
@@ -16,34 +23,17 @@ header {
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 header h1 {
     font-size: 24px;
     font-weight: 600;
-}
-
-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-
-nav ul li {
-    margin-left: 20px;
-}
-
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-}
-
-nav ul li a:hover {
-    color: #ffc800;
-    transition: color 0.3s ease;
 }
 
 /* Dashboard container styling */
@@ -119,21 +109,24 @@ nav ul li a:hover {
 }
 
 .delete-btn:hover {
-    color: #e60000;
+    background-color: #ff4d4d !important;
+    color: #ffffff !important;
 }
 
 /* Logout button styling */
-.btn-submit {
+.logout-btn {
+    font-family: 'Poppins', sans-serif;
+    max-width: 600px;
     background-color: #ff4d4d;
     color: white;
     padding: 10px 15px;
     border: none;
-    border-radius: 4px;
-    font-size: 14px;
+    border-radius: 8px;
+    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.btn-submit:hover {
+.logout-btn:hover {
     background-color: #e60000;
 }
