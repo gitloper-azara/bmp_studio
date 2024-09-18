@@ -10,6 +10,7 @@ from django import forms
 from imagekit.models import ImageSpecField
 from imagekit.processors import resize
 from PIL import Image as PILImage
+import json
 import ffmpeg
 import tempfile
 import subprocess
@@ -102,7 +103,7 @@ class Video(models.Model):
         source='thumbnail',
         processors=[resize.ResizeToFit(500, 500)],
         format='JPEG',
-        options={'quality': 70}
+        options={'quality': 100}
     )
     width = models.PositiveIntegerField(null=True, blank=True)
     height = models.PositiveIntegerField(null=True, blank=True)
@@ -172,7 +173,7 @@ class Video(models.Model):
         try:
             probe = subprocess.check_output([
                 'ffprobe',
-                '-v', 'quite',
+                '-v', 'quiet',
                 '-print_format', 'json',
                 '-show_format', '-show_streams',
                 self.video.path
