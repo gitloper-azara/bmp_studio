@@ -28,12 +28,10 @@
 
                 <!-- Right side: Menu button (for mobile view or login/signup) -->
                 <div class="auth_buttons" id="authButtons">
-                    <form action="{% url 'login' %}" method="post" style="display: inline;">
-                        {% csrf_token %} <!-- Include for POST resquests in Django -->
+                    <form action="{% url 'user-login' %}" method="get" style="display: inline;">
                         <button type="submit" class="btn">Login</button>
                     </form>
-                    <form action="{% url 'register' %}" method="post" style="display: inline;">
-                        {% csrf_token %}
+                    <form action="{% url 'register-user' %}" method="get" style="display: inline;">
                         <button type="submit" class="btn">SignUp</button>
                     </form>
                 </div>
