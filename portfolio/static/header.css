@@ -39,7 +39,7 @@ header a {
 .nav_items a {
     margin: 20px 15px;
     text-decoration: none;
-    transition: color 0.2s, transform 0.2s;
+    transition: color 0.2s, transform 0.2s ease;
     color: #000;
 }
 

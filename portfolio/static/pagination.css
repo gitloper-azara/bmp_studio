@@ -1,0 +1,30 @@
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination .step-links {
+    display: flex;
+    gap: 10px;
+}
+
+.pagination a {
+    text-decoration: none;
+    background-color: #ffc800;
+    color: white;
+    border-radius: 8px;
+    padding: 8px 16px;
+    transition: background-color 0.3 ease, transform 0.3 ease;
+}
+
+.pagination a:hover {
+    background-color: #ffb300;
+    transform: scale(1.1);
+}
+
+.pagination .current {
+    padding: 8px 16px;
+    font-weight: bold;
+}

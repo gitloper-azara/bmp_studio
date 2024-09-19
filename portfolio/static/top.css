@@ -17,4 +17,5 @@
 
 #backToTopBtn:hover {
     background-color: #ffb300;
+    transform: scale(1.18);
 }
