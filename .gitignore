@@ -16,3 +16,6 @@ media/
 
 # django migrations
 **/migrations/
+
+# personal script-helpers
+*.sh

@@ -62,6 +62,23 @@
                 <p>No images available</p>
             {% endfor %}
         </div>
+
+        <!-- Pagination controls -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if images.has_previous %}
+                    <a href="?page=1">&laquo; First</a>
+                    <a href="?page={{ images.previous_page_number }}">Previous</a>
+                {% endif %}
+                <span class="current">
+                    Page {{ images.number }} of {{ images.paginator.num_pages }}
+                </span>
+                {% if images.has_next %}
+                    <a href="?page={{ images.next_page_number }}">Next</a>
+                    <a href="?page={{ images.paginator.num_pages }}">Last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
         <footer>
             <div class="footer_container">
                 <div class="socials">

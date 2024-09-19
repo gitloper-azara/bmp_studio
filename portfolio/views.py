@@ -26,6 +26,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.middleware.csrf import get_token
+from django.core.paginator import Paginator
 
 
 class ImageListAPIView(generics.ListCreateAPIView):
@@ -190,9 +191,15 @@ class DeleteImageView(LoginRequiredMixin, View):
 def index(request):
     """ Index route for website
     """
-    images = Image.objects.select_related('photographer').order_by(
+    image_list = Image.objects.select_related('photographer').order_by(
         "-created_at"
     )
+
+    # implement pagination: 40 images per page
+    paginator = Paginator(image_list, 40)
+    page_number = request.GET.get('page')
+    images = paginator.get_page(page_number)
+
     return render(request, "index.html", {"images": images})
 
 
@@ -200,9 +207,14 @@ def portfolio(request):
     """ Portoflio route for displaying images
     """
     categories = Category.objects.all()
-    images = Image.objects.select_related('photographer').order_by(
+    image_list = Image.objects.select_related('photographer').order_by(
         "-created_at"
     )
+
+    # implement pagination: 40 images per page
+    paginator = Paginator(image_list, 40)
+    page_number = request.GET.get('page')
+    images = paginator.get_page(page_number)
 
     return render(request, "portfolio/portfolio.html", {
         "images": images,
@@ -214,25 +226,32 @@ def portfolio_by_category(request, category_id=None):
     """ Portoflio route for displaying images
     """
     categories = Category.objects.all()
-    images = Image.objects.all().select_related('photographer').order_by(
+    image_list = Image.objects.all().select_related('photographer').order_by(
         "-created_at"
     )
 
     # optionally filter images by category if a category_id is given
     if category_id:
-        images = Image.objects.filter(
+        image_list = Image.objects.filter(
             categories__id=category_id
         ).order_by("-created_at")
         selected_category = Category.objects.get(id=category_id)
 
+    # implement pagination: 40 images per page
+    paginator = Paginator(image_list, 40)
+    page_number = request.GET.get('page')
+    images = paginator.get_page(page_number)
+
     return render(request, "portfolio/portfolio.html", {
         "images": images,
         "categories": categories,
-        "selected_category": selected_category
+        "selected_category": selected_category if category_id else None
     })
 
 
 def about(request):
+    """ Renders and displays the about section of the website
+    """
     return render(request, "about.html")
 
 
@@ -267,4 +286,6 @@ def videos(request):
 
 
 def blogs(request):
+    """ Renders and returns the blog section of the website
+    """
     return render(request, "blog.html")
