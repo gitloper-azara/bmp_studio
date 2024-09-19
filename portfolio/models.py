@@ -32,7 +32,9 @@ class Category(models.Model):
 class Image(models.Model):
     """ Image class
     """
-    client = models.ManyToManyField(User, related_name="client_images", blank=True)
+    client = models.ManyToManyField(
+        User, related_name="client_images", blank=True
+    )
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     url = models.URLField(max_length=1000)
@@ -98,7 +100,9 @@ class Video(models.Model):
     description = models.TextField(blank=True, null=True)
     url = models.URLField(max_length=1000)
     video = models.FileField(upload_to="videos/", null=True, blank=True)
-    thumbnail = models.ImageField(upload_to="video_thumbnails/", blank=True, null=True)
+    thumbnail = models.ImageField(
+        upload_to="video_thumbnails/", blank=True, null=True
+    )
     thumbnail_small = ImageSpecField(
         source='thumbnail',
         processors=[resize.ResizeToFit(500, 500)],
@@ -108,7 +112,9 @@ class Video(models.Model):
     width = models.PositiveIntegerField(null=True, blank=True)
     height = models.PositiveIntegerField(null=True, blank=True)
     duration = models.FloatField(null=True, blank=True)
-    photographer = models.ForeignKey(Photographer, related_name="videos", on_delete=models.CASCADE)
+    photographer = models.ForeignKey(
+        Photographer, related_name="videos", on_delete=models.CASCADE
+    )
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -137,14 +143,20 @@ class Video(models.Model):
         temp_thumbnail = os.path.join(temp_dir, 'thumb.jpg')
 
         try:
-            print(f"Attempting to create thumbnail from video: {self.video.path}")
+            print(
+                f"Attempting to create thumbnail from "
+                f"video: {self.video.path}"
+            )
             # Construct FFmpeg command
             ffmpeg_command = [
-                'ffmpeg', '-i', self.video.path, '-ss', '00:00:10', '-vframes', '1',
+                'ffmpeg', '-i', self.video.path,
+                '-ss', '00:00:10', '-vframes', '1',
                 '-vf', 'scale=480:-1', temp_thumbnail
             ]
             print(f"Running FFmpeg command: {' '.join(ffmpeg_command)}")
-            result = subprocess.run(ffmpeg_command, check=True, stderr=subprocess.PIPE)
+            result = subprocess.run(
+                ffmpeg_command, check=True, stderr=subprocess.PIPE
+            )
             print(f"FFmpeg command executed with result: {result}")
 
             with PILImage.open(temp_thumbnail) as img:
@@ -152,7 +164,9 @@ class Video(models.Model):
                 img.save(temp_thumbnail, "JPEG")
 
             with open(temp_thumbnail, 'rb') as f:
-                self.thumbnail.save(f'{self.title}_thumbnail.jpg', File(f), save=True)
+                self.thumbnail.save(
+                    f'{self.title}_thumbnail.jpg', File(f), save=True
+                )
             print("Thumbnail created successfully")
 
         except subprocess.CalledProcessError as e:

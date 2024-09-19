@@ -11,8 +11,12 @@ from django.contrib.auth.models import User
 from django.http import HttpRequest, JsonResponse
 from django.views import View
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
-from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.permissions import (
+    AllowAny, IsAuthenticated, IsAdminUser
+)
+from rest_framework.decorators import (
+    authentication_classes, permission_classes
+)
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -81,13 +85,15 @@ class LoginView(View):
                 response_data = response.data
                 response_data['user_id'] = user.id
                 return JsonResponse(response_data)
-        return JsonResponse({ "error": "Invalid credentials" }, status=400)
+        return JsonResponse(
+            {"error": "Invalid credentials"}, status=400
+        )
 
     def get(self, request):
         """ Handle GET requests, returns a CSRF token
         """
         csrf_token = get_token(request)
-        return JsonResponse({ "csrf_token": csrf_token })
+        return JsonResponse({"csrf_token": csrf_token})
 
 
 class VerifyToken(APIView):
@@ -102,7 +108,9 @@ class VerifyToken(APIView):
         user_id = request.data.get('user_id')
 
         if not token or not user_id:
-            return Response({ "is_valid": False, "error": "Invalid request" }, status=400)
+            return Response(
+                {"is_valid": False, "error": "Invalid request"}, status=400
+            )
 
         try:
             # verify that the token belongs to the claiming user
@@ -116,7 +124,9 @@ class VerifyToken(APIView):
 
             return Response({"is_valid": True, "username": user.username})
         except (ValueError, User.DoesNotExist):
-            return Response({"is_valid": False, "error": "Invalid request"}, status=400)
+            return Response(
+                {"is_valid": False, "error": "Invalid request"}, status=400
+            )
 
 
 class UserLoginView(TemplateView):
@@ -124,7 +134,9 @@ class UserLoginView(TemplateView):
     """
     template_name = "login.html"
 
-    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+    def dispatch(
+            self, request: HttpRequest, *args: Any, **kwargs: Any
+    ) -> HttpResponse:
         """ Redirect user to dashboard if already authenticated
         """
         if request.user.is_authenticated:
@@ -138,7 +150,9 @@ class UserRegisterView(TemplateView):
     template_name = "register.html"
 
 
-@method_decorator(login_required(login_url='/user-login/'), name='dispatch')
+@method_decorator(
+    login_required(login_url='/user-login/'), name='dispatch'
+)
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 class UserDashboardView(LoginRequiredMixin, TemplateView):
@@ -176,7 +190,9 @@ class DeleteImageView(LoginRequiredMixin, View):
 def index(request):
     """ Index route for website
     """
-    images = Image.objects.select_related('photographer').order_by("-created_at")
+    images = Image.objects.select_related('photographer').order_by(
+        "-created_at"
+    )
     return render(request, "index.html", {"images": images})
 
 
@@ -184,7 +200,9 @@ def portfolio(request):
     """ Portoflio route for displaying images
     """
     categories = Category.objects.all()
-    images = Image.objects.select_related('photographer').order_by("-created_at")
+    images = Image.objects.select_related('photographer').order_by(
+        "-created_at"
+    )
 
     return render(request, "portfolio/portfolio.html", {
         "images": images,
@@ -196,11 +214,15 @@ def portfolio_by_category(request, category_id=None):
     """ Portoflio route for displaying images
     """
     categories = Category.objects.all()
-    images = Image.objects.all().select_related('photographer').order_by("-created_at")
+    images = Image.objects.all().select_related('photographer').order_by(
+        "-created_at"
+    )
 
     # optionally filter images by category if a category_id is given
     if category_id:
-        images = Image.objects.filter(categories__id=category_id).order_by("-created_at")
+        images = Image.objects.filter(
+            categories__id=category_id
+        ).order_by("-created_at")
         selected_category = Category.objects.get(id=category_id)
 
     return render(request, "portfolio/portfolio.html", {
@@ -221,7 +243,8 @@ def contact(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             send_mail(
-                f"Message from {form.cleaned_data['name']} on BMP Studio's Website",
+                f"Message from {form.cleaned_data['name']} "
+                f"on BMP Studio's Website",
                 form.cleaned_data['message'],
                 form.cleaned_data['email'],
                 [
