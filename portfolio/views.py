@@ -60,6 +60,9 @@ class UserRegistrationView(generics.CreateAPIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
 
+            # log in the user
+            login(request, user)
+
             # generate tokens here
             refresh = RefreshToken.for_user(user=user)
 
@@ -67,11 +70,10 @@ class UserRegistrationView(generics.CreateAPIView):
             return Response({
                 "refresh": str(refresh),
                 "access": str(refresh.access_token),
-                "redirect_url": reverse('dashboard')
             }, status=status.HTTP_201_CREATED)
 
         # return validation errors
-        return JsonResponse(
+        return Response(
             {"errors": serializer.errors},
             status=status.HTTP_400_BAD_REQUEST
         )

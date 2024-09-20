@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch(error => {
         console.error(`Error: ${error}`);
-        alert('An error occurred. Please try again later.');
+        alert('An internal error occurred. Please try again later.');
       });
     });
   }

@@ -14,31 +14,34 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .then(response => response.json())
       .then(data => {
+        console.log(data);
         if (data.access) { // if register data has access key to signify a successful registration
           // store access and refresh token in localStorage
           localStorage.setItem('accessToken', data.access);
           localStorage.setItem('refreshToken', data.refresh);
           // redirect to the dashboard
-          window.location.href = data.redirect_url;
+          window.location.href = "/dashboard/";
         } else {
           // display validation errors
           const errorDivs = document.querySelectorAll('.error');
           errorDivs.forEach(div => div.remove()); // clear previous errors
 
-          const errors = data.errors;
+          const errors = data;
           for (const field in errors) {
-            const errorMsg = errors[field];
-            console.log(errorMsg);
+            const fieldErrors = errors[field];
+            console.log(fieldErrors);
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error';
-            errorDiv.textContent = errorMsg.join(', ');
+
+            // display the error message for each field
+            errorDiv.textContent = fieldErrors.join(', ');
             document.querySelector(`#id_${field}`).parentElement.appendChild(errorDiv);
           }
         }
       })
       .catch(error => {
         console.error(`Error: ${error}`);
-        alert('An error occurred. Please try again later.');
+        alert('An internal error occurred. Please try again later.');
       });
     });
   }

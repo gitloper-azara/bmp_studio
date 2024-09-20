@@ -150,3 +150,12 @@
     border: none;
     cursor: pointer;
 }
+
+.error {
+    color: #ff0000;
+    font-size: x-small;
+    margin-top: 2px;
+    padding-left: 8px;
+    border-left: 1px solid #ff0000;
+    display: block;
+}
