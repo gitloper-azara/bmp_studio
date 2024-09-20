@@ -41,7 +41,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         """ Meta class
         """
         model = User
-        fields = ["username", "password", "email"]
+        fields = [
+            "first_name", "last_name", "username", "password", "email"
+        ]
 
     def validate_email(self, email):
         """ Validate that the email provided is unique
@@ -50,6 +52,15 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Email is already in use.")
         return email
 
+    def validate_username(self, username):
+        """ Validate that the username provided is unique
+        """
+        if User.objects.filter(username=username).exists():
+            raise serializers.ValidationError(
+                "Username has already been taken."
+            )
+        return username
+
     def create(self, validated_data):
         """ Create method that creates a new user with a hashed pwd
         """
@@ -57,5 +68,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             username=validated_data['username'],
             email=validated_data['email'],
             password=validated_data['password'],
+            first_name=validated_data['first_name'],
+            last_name = validated_data['last_name']
         )
         return user

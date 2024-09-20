@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.models import User
 from django.http import HttpRequest, JsonResponse
+from django.urls import reverse
 from django.views import View
 from rest_framework.views import APIView
 from rest_framework.permissions import (
@@ -53,18 +54,27 @@ class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
 
     def post(self, request, *args, **kwargs):
-        """ handle new user creation post request
+        """ Handle new user creation post request
         """
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.save()
 
-        # generate tokens here
-        refresh = RefreshToken.for_user(user=user)
-        return Response({
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),
-        }, status=status.HTTP_201_CREATED)
+            # generate tokens here
+            refresh = RefreshToken.for_user(user=user)
+
+            # redirect to dashboard after successful registration
+            return Response({
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+                "redirect_url": reverse('dashboard')
+            }, status=status.HTTP_201_CREATED)
+
+        # return validation errors
+        return JsonResponse(
+            {"errors": serializer.errors},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class LoginView(View):
