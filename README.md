@@ -6,12 +6,10 @@ It stores image metadata in a MySQL database, and actual images are hosted in cl
 
 - [Features](#features)
 - [Technologies Used](#technologies-used)
-- [Getting Started]()
-- [Installation]()
-- [Running the Project]()
-- [Environment Variables]()
-- [Database Setup]()
-- [Directory Structure]()
+- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [Running the Project](#running-the-project)
+- [Directory Structure](#directory-structure)
 - [License]()
 
 ## Features
@@ -32,7 +30,11 @@ It stores image metadata in a MySQL database, and actual images are hosted in cl
 - **Other Libraries:**
     - `python-decouple` for env management
     - `pillow` for image processing
-    - `django-staticfiles` for static asset management
+    - `django-imagekit` for image processing
+    - `django-widget-tweaks` for form customization
+    - `djangorestframework` for web API creation
+    - `djangorestframework-simplejwt` for user authentication
+    - `ffmpeg` for video processing (can process audio and other multimedia files)
 
 ## Getting Started
 
@@ -64,3 +66,58 @@ Before you begin, ensure you have the following installed:
     ```bash
     pip install -r requirements.txt
     ```
+
+4. **Set up environment variables:**
+    - Create a `.env` file in the project root and the necessary environment variables
+    ```bash
+    SECRET_KEY=your_secret_key
+    BMP_MYSQL_USER=mysql_username
+    BMP_MYSQL_PWD=mysql_password
+    BMP_MYSQL_DB=mysql_database_name
+    BMP_MYSQL_HOST=localhost
+    ```
+
+### Running the Project
+
+1. **Migrate the database:**
+    ```bash
+    ./manage.py makemigrations
+    ./manage.py migrate
+    ```
+
+2. **Create a superuser to access the Django Admin:**
+    ```bash
+    ./manage.py createsuperuser
+    ```
+
+3. **Run the development server:**
+    ```bash
+    ./manage.py runserver
+    ```
+
+4. Open the web app at `http://127.0.0.1:8000`.
+
+
+### Directory Structure
+
+```bash
+bmp_studio/
+|
+|── portfolio/              # main django app
+|    |── management/        # custom django management commands
+|    |── migrations/        # database migrations
+|    |── static/            # static files (CSS, JS, Images)
+|    |── templates/         # HTML templates
+|    |── admin.py           # django admin config
+|    |── apps.py            # app config
+|    |── models.py          # models defining database schema
+|    |── serializers.py     # complex queryset conversions
+|    |── urls.py            # URLs mapping to views
+|    └── views.py           # views handling the requests
+|
+|── imageurlprocessor.py    # processes drive urls to direct urls
+|── manage.py               # django management commands
+|── requirements.txt        # python dependencies
+|── README.md               # project doc
+└── .gitignore              # files ignored by git
+```
