@@ -4,14 +4,12 @@ import os
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.files import File
-from django.conf import settings
 from django.utils import timezone
 from django import forms
 from imagekit.models import ImageSpecField
 from imagekit.processors import resize
 from PIL import Image as PILImage
 import json
-import ffmpeg
 import tempfile
 import subprocess
 import os
@@ -43,7 +41,7 @@ class Image(models.Model):
         source='image',
         processors=[resize.ResizeToFit(500, 500)],
         format='JPEG',
-        options={'quality': 70}
+        options={'quality': 100}
     )
     width = models.PositiveIntegerField(null=True, blank=True)
     height = models.PositiveIntegerField(null=True, blank=True)
@@ -134,7 +132,6 @@ class Video(models.Model):
     def create_thumbnail(self):
         """ Thumbnail generator
         """
-        print("Entering create_thumbnail method")
         if not self.video:
             print("No video file found")
             return
@@ -143,21 +140,15 @@ class Video(models.Model):
         temp_thumbnail = os.path.join(temp_dir, 'thumb.jpg')
 
         try:
-            print(
-                f"Attempting to create thumbnail from "
-                f"video: {self.video.path}"
-            )
             # Construct FFmpeg command
             ffmpeg_command = [
                 'ffmpeg', '-i', self.video.path,
                 '-ss', '00:00:10', '-vframes', '1',
                 '-vf', 'scale=480:-1', temp_thumbnail
             ]
-            print(f"Running FFmpeg command: {' '.join(ffmpeg_command)}")
             result = subprocess.run(
                 ffmpeg_command, check=True, stderr=subprocess.PIPE
             )
-            print(f"FFmpeg command executed with result: {result}")
 
             with PILImage.open(temp_thumbnail) as img:
                 img.thumbnail((480, 480))
@@ -167,7 +158,6 @@ class Video(models.Model):
                 self.thumbnail.save(
                     f'{self.title}_thumbnail.jpg', File(f), save=True
                 )
-            print("Thumbnail created successfully")
 
         except subprocess.CalledProcessError as e:
             print(f'FFmpeg error: {e.stderr}')
