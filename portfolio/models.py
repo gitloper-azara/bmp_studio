@@ -133,7 +133,6 @@ class Video(models.Model):
         """ Thumbnail generator
         """
         if not self.video:
-            print("No video file found")
             return
 
         temp_dir = tempfile.mkdtemp()
