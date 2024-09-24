@@ -61,7 +61,8 @@ class Image(models.Model):
         return os.path.basename(self.image.name)
 
     def save(self, *args, **kwargs):
-        """"""
+        """ Overide save to include width and height retrieval on save
+        """
         super().save(*args, **kwargs)
         if self.image and not self.width and not self.height:
             with PILImage.open(self.image.path) as img:
