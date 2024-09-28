@@ -19,3 +19,6 @@ media/
 
 # personal script-helpers
 *.sh
+
+# google cloud service account json file
+config/nearest-252012-37a553e580f9.json

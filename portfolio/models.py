@@ -12,7 +12,7 @@ from PIL import Image as PILImage
 import json
 import tempfile
 import subprocess
-import os
+from io import BytesIO
 
 
 class Category(models.Model):
@@ -30,19 +30,15 @@ class Category(models.Model):
 class Image(models.Model):
     """ Image class
     """
+
+    IMGIX_DOMAIN = 'bmpstudio.imgix.net'
+
     client = models.ManyToManyField(
         User, related_name="client_images", blank=True
     )
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    url = models.URLField(max_length=1000)
     image = models.ImageField(upload_to='images/')
-    thumbnail = ImageSpecField(
-        source='image',
-        processors=[resize.ResizeToFit(500, 500)],
-        format='JPEG',
-        options={'quality': 100}
-    )
     width = models.PositiveIntegerField(null=True, blank=True)
     height = models.PositiveIntegerField(null=True, blank=True)
     photographer = models.ForeignKey(
@@ -60,12 +56,40 @@ class Image(models.Model):
     def filename(self):
         return os.path.basename(self.image.name)
 
+    @property
+    def optimized_image_url(self):
+        """ Return optimized image URL from Imgix
+        """
+        return f'https://{self.IMGIX_DOMAIN}/{self.image.name}?auto=format,compress,enhance'
+
+    @property
+    def srcset_image_url(self):
+        """ Generate srcset for images with multiple device pixel ratios
+        """
+        base_url = f'https://{self.IMGIX_DOMAIN}/{self.image.name}?auto=format,compress,enhance'
+        return f'{base_url}&dpr=1 1x, {base_url}&dpr=2 2x, {base_url}&dpr=3 3x'
+
+    @property
+    def optimized_thumbnail_url(self):
+        """ Return optimized thumbnail URL from imgix
+        """
+        return f'https://{self.IMGIX_DOMAIN}/{self.image.name}?w=500&h=500&fit=max&auto=format,enhance&q=90'
+
+    @property
+    def srcset_thumbnail_url(self):
+        """ Generate srcset for thumbnails with multiple device pixel ratios
+        """
+        base_url = f'https://{self.IMGIX_DOMAIN}/{self.image.name}?w=500&h=500&fit=max&auto=format,enhance&q=90'
+        return f'{base_url}&dpr=1 1x, {base_url}&dpr=2 2x, {base_url}&dpr=3 3x'
+
     def save(self, *args, **kwargs):
         """ Overide save to include width and height retrieval on save
         """
         super().save(*args, **kwargs)
         if self.image and not self.width and not self.height:
-            with PILImage.open(self.image.path) as img:
+            # open image from file-like object (use case for GCS)
+            image_file = BytesIO(self.image.read())
+            with PILImage.open(image_file) as img:
                 self.width, self.height = img.size
                 super().save(update_fields=['width', 'height'])
 

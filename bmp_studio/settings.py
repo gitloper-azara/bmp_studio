@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+from google.oauth2.service_account import Credentials
 from pathlib import Path
 from decouple import config
 import os
@@ -32,6 +33,18 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LOGIN_URL = '/login/'
+
+# Google Cloud Storage Settings
+GS_BUCKET_NAME = 'bmpstudio-web-bucket'
+GS_CREDENTIALS = Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, 'config/nearest-252012-37a553e580f9.json')
+)
+
+# use Google Cloud Storage to store media files
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+# media url accessibilty where django should store images
+MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 
 
 # Application definition
@@ -137,9 +150,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'portfolio/static')]
 
 # media files (jpeg, png)
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
