@@ -15,11 +15,10 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Image
         fields = [
             "id",
+            "client",
             "title",
             "description",
-            "url",
             "image",
-            "thumbnail",
             "width",
             "height",
             "photographer",
@@ -28,7 +27,6 @@ class ImageSerializer(serializers.ModelSerializer):
         ]
 
     image = serializers.ImageField(use_url=True)
-    thumbnail = serializers.ImageField(use_url=True)
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):

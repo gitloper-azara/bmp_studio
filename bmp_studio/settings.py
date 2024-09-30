@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'portfolio',
     'widget_tweaks',
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'corsheaders',
     'django.contrib.admin',
@@ -161,6 +162,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Rest Framework Authentication
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
