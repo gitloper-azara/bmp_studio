@@ -130,6 +130,8 @@ h1 {
 
     .img-container {
         flex: 1 2 100%;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
     .img-container.wide,

@@ -54,35 +54,51 @@ class Image(models.Model):
 
     @property
     def filename(self):
+        """ Returns the final component (file name) of an image
+        """
         return os.path.basename(self.image.name)
 
+    DOMAIN = f'https://{IMGIX_DOMAIN}/'
+
     @property
-    def optimized_image_url(self):
+    def optimized_image_url(self) -> str:
         """ Return optimized image URL from Imgix
         """
-        return f'https://{self.IMGIX_DOMAIN}/{self.image.name}?auto=format,compress,enhance'
+        domain_url = self.DOMAIN + f'{self.image.name}'
+        return domain_url + '?auto=format,compress,enhance'
 
     @property
-    def srcset_image_url(self):
+    def srcset_image_url(self) -> str:
         """ Generate srcset for images with multiple device pixel ratios
         """
-        base_url = f'https://{self.IMGIX_DOMAIN}/{self.image.name}?auto=format,compress,enhance'
-        return f'{base_url}&dpr=1 1x, {base_url}&dpr=2 2x, {base_url}&dpr=3 3x'
+        domain_url = self.DOMAIN + f'{self.image.name}'
+        base_url = domain_url + '?auto=format,compress,enhance'
+        dpr_1 = f'{base_url}&dpr=1 1x, '
+        dpr_2 = f'{base_url}&dpr=2 2x, '
+        dpr_3 = f'{base_url}&dpr=3 3x'
+        return dpr_1 + dpr_2 + dpr_3
 
     @property
-    def optimized_thumbnail_url(self):
+    def optimized_thumbnail_url(self) -> str:
         """ Return optimized thumbnail URL from imgix
         """
-        return f'https://{self.IMGIX_DOMAIN}/{self.image.name}?w=500&h=500&fit=max&auto=format,enhance&q=90'
+        domain_url = self.DOMAIN + f'{self.image.name}'
+        query_param = '?w=500&h=500&fit=max&auto=format,enhance&q=90'
+        return domain_url + query_param
 
     @property
-    def srcset_thumbnail_url(self):
+    def srcset_thumbnail_url(self) -> str:
         """ Generate srcset for thumbnails with multiple device pixel ratios
         """
-        base_url = f'https://{self.IMGIX_DOMAIN}/{self.image.name}?w=500&h=500&fit=max&auto=format,enhance&q=90'
-        return f'{base_url}&dpr=1 1x, {base_url}&dpr=2 2x, {base_url}&dpr=3 3x'
+        domain_url = self.DOMAIN + f'{self.image.name}'
+        query_param = '?w=500&h=500&fit=max&auto=format,enhance&q=90'
+        base_url = domain_url + query_param
+        dpr_1 = f'{base_url}&dpr=1 1x, '
+        dpr_2 = f'{base_url}&dpr=2 2x, '
+        dpr_3 = f'{base_url}&dpr=3 3x'
+        return dpr_1 + dpr_2 + dpr_3
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         """ Overide save to include width and height retrieval on save
         """
         super().save(*args, **kwargs)
@@ -140,7 +156,7 @@ class Video(models.Model):
     )
     created_at = models.DateTimeField(default=timezone.now)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """ Return string representation of Video class
         """
         return self.title
@@ -154,7 +170,7 @@ class Video(models.Model):
         if not self.width or not self.height or not self.duration:
             self.set_video_attributes()
 
-    def create_thumbnail(self):
+    def create_thumbnail(self) -> None:
         """ Thumbnail generator
         """
         if not self.video:
@@ -192,7 +208,7 @@ class Video(models.Model):
                 os.remove(temp_thumbnail)
             os.rmdir(temp_dir)
 
-    def set_video_attributes(self):
+    def set_video_attributes(self) -> None:
         """ Set video attributes on save
         """
         if not self.video:
